@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Bocatto</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 60px;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #ffc107 !important;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        .container-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .page-header {
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .page-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #ffc107;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .filters-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .filters-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #ecf0f1;
+            background: white;
+            color: #2c3e50;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            font-size: 0.95rem;
+        }
+        
+        .filter-btn:hover {
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+        
+        .filter-btn.active {
+            background: #ffc107;
+            border-color: #ffc107;
+            color: #000;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .table {
+            margin: 0;
+        }
+        
+        .table thead {
+            background: #2c3e50;
+            color: white;
+        }
+        
+        .table thead th {
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+            vertical-align: middle;
+            min-height: 44px;
+        }
+        
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-color: #ecf0f1;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .badge {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            border: 1px solid #ecf0f1;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            min-height: 36px;
+            margin-right: 5px;
+        }
+        
+        .action-btn:hover {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            color: #7f8c8d;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .filter-group {
+                flex-direction: column;
+            }
+            
+            .filter-btn {
+                width: 100%;
+            }
+            
+            .table {
+                font-size: 0.9rem;
+            }
+            
+            .table thead th,
+            .table tbody td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-chart-bar"></i> BOCATTO ADMIN
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#ordenes">Órdenes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#productos" onclick="loadAdminProducts()">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-danger btn-sm" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Salir
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container-main">
+        <!-- HEADER -->
+        <div class="page-header">
+            <h1><i class="fas fa-orders"></i> Panel de Administración</h1>
+            <p>Gestiona pedidos y productos de Bocatto</p>
+        </div>
+        
+        <!-- ESTADÍSTICAS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-label">Órdenes Totales</div>
+                <div class="stat-value" id="totalOrders">0</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-label">Pendientes</div>
+                <div class="stat-value" id="pendingOrders">0</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-label">Completadas</div>
+                <div class="stat-value" id="completedOrders">0</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-label">Ingresos Totales</div>
+                <div class="stat-value" id="totalRevenue">$0</div>
+            </div>
+        </div>
+        
+        <!-- FILTROS -->
+        <div class="filters-section">
+            <h3>Filtrar Órdenes</h3>
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="todas" onclick="filterOrders('todas', this)">
+                    Todas
+                </button>
+                <button class="filter-btn" data-filter="pendiente" onclick="filterOrders('pendiente', this)">
+                    Pendientes
+                </button>
+                <button class="filter-btn" data-filter="pagado" onclick="filterOrders('pagado', this)">
+                    Pagadas
+                </button>
+                <button class="filter-btn" data-filter="cancelado" onclick="filterOrders('cancelado', this)">
+                    Canceladas
+                </button>
+            </div>
+        </div>
+        
+        <!-- TABLA DE ÓRDENES -->
+        <div class="mb-3">
+            <label for="orderSearchInput" class="form-label">Buscar orden por ID</label>
+            <div class="d-flex gap-2">
+                <input id="orderSearchInput" class="form-control" placeholder="Ingrese ID de orden (ej: 83175066...)" />
+                <button class="btn btn-primary" onclick="searchOrder()"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+            <small class="text-muted">Campo para ingresar ID de pedido y botón "Buscar".</small>
+        </div>
+        <div id="loadingState" class="alert alert-info" role="alert">
+            <i class="fas fa-spinner fa-spin"></i> Cargando órdenes...
+        </div>
+        
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <h3>No hay órdenes</h3>
+            <p>Los pedidos aparecerán aquí</p>
+        </div>
+        
+        <div class="table-container" id="tableContainer" style="display: none;">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID Orden</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTable">
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- SECCIÓN DE PRODUCTOS (ADMIN) -->
+        <section id="productos" class="py-5">
+            <div class="container-main">
+                <div class="page-header">
+                    <h1><i class="fas fa-box-open"></i> Gestión de Productos</h1>
+                    <p>Lista de productos disponibles en el catálogo</p>
+                </div>
+
+                <div id="adminProductsContainer">
+                    <div class="alert alert-info">Pulsa <strong>Productos</strong> en el menú para cargar la lista.</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        let allOrders = [];
+        let currentFilter = 'todas';
+        
+        // Cargar órdenes al iniciar
+        async function loadOrders() {
+            try {
+                const response = await fetch(`${API_BASE}/orders`);
+                if (!response.ok) throw new Error('Error al cargar órdenes');
+                
+                allOrders = await response.json();
+                updateStats();
+                displayOrders();
+                
+                document.getElementById('loadingState').style.display = 'none';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingState').innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i> Error al cargar órdenes. Intenta de nuevo.
+                `;
+            }
+        }
+        
+        // Actualizar estadísticas
+        function updateStats() {
+            const total = allOrders.length;
+            const pending = allOrders.filter(o => o.estado === 'pendiente').length;
+            const completed = allOrders.filter(o => o.estado === 'pagado').length;
+            const revenue = allOrders.reduce((sum, o) => sum + (o.precioTotal || 0), 0);
+            
+            document.getElementById('totalOrders').textContent = total;
+            document.getElementById('pendingOrders').textContent = pending;
+            document.getElementById('completedOrders').textContent = completed;
+            document.getElementById('totalRevenue').textContent = '$' + revenue.toLocaleString('es-CL');
+        }
+        
+        // Mostrar órdenes
+        function displayOrders() {
+            let filteredOrders = allOrders;
+
+            if (currentFilter !== 'todas') {
+                if (currentFilter === 'cancelado') {
+                    // Aceptar ambas variantes 'cancelado' y 'cancelada' si vienen del backend
+                    filteredOrders = allOrders.filter(o => o.estado === 'cancelado' || o.estado === 'cancelada');
+                } else {
+                    filteredOrders = allOrders.filter(o => o.estado === currentFilter);
+                }
+            }
+            
+            const tableBody = document.getElementById('ordersTable');
+            const tableContainer = document.getElementById('tableContainer');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (filteredOrders.length === 0) {
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            tableContainer.style.display = 'block';
+            emptyState.style.display = 'none';
+            
+            tableBody.innerHTML = filteredOrders.map(order => `
+                <tr>
+                    <td><strong>${order.id.substring(0, 8)}...</strong></td>
+                    <td>${order.items ? order.items.length : 0} item(s)</td>
+                    <td>$${order.precioTotal ? order.precioTotal.toLocaleString('es-CL') : '0'}</td>
+                    <td>
+                        <span class="badge badge-${getStatusClass(order.estado)}">
+                            ${getStatusText(order.estado)}
+                        </span>
+                    </td>
+                    <td>${new Date(order.fechaCreacion).toLocaleDateString('es-CL')}</td>
+                    <td>
+                        <button class="action-btn" title="Ver detalles" onclick="viewOrder('${order.id}')">
+                            <i class="fas fa-eye"></i> Ver
+                        </button>
+                        ${order.estado === 'pendiente' ? `
+                            <button class="action-btn" title="Marcar como pagado" onclick="payOrder('${order.id}')">
+                                <i class="fas fa-check"></i> Pagar
+                            </button>
+                            <button class="action-btn btn btn-sm btn-outline-warning" title="Cancelar orden" onclick="cancelOrder('${order.id}')" style="margin-left:.5rem;">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Helper para clase de estado
+        function getStatusClass(status) {
+            const classes = {
+                'pendiente': 'pending',
+                'pagado': 'completed',
+                'cancelado': 'cancelled',
+                'cancelada': 'cancelled'
+            };
+            return classes[status] || 'pending';
+        }
+        
+        // Helper para texto de estado
+        function getStatusText(status) {
+            const texts = {
+                'pendiente': '⏳ Pendiente',
+                'pagado': '✓ Pagado',
+                'cancelado': '✕ Cancelado',
+                'cancelada': '✕ Cancelado'
+            };
+            return texts[status] || status;
+        }
+        
+        // Filtrar órdenes
+        function filterOrders(filter, btnEl) {
+            currentFilter = filter;
+
+            // Actualizar botones activos
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnEl && btnEl.classList) btnEl.classList.add('active');
+
+            displayOrders();
+        }
+        
+        // Logout
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        }
+        
+        // Inicializar
+        loadOrders();
+        
+        // Recargar cada 10 segundos
+        setInterval(loadOrders, 10000);
+        
+                // Mostrar modal de orden (creamos elemento si no existe)
+                function ensureOrderModal() {
+                        if (document.getElementById('orderModal')) return;
+                        const modalHtml = `
+                                <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Detalles de la Orden</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" id="orderModalBody">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        `;
+                        document.body.insertAdjacentHTML('beforeend', modalHtml);
+                }
+
+                // Cargar productos para el admin
+                async function loadAdminProducts() {
+                    const container = document.getElementById('adminProductsContainer');
+                    if (!container) return;
+                    container.innerHTML = '<div class="alert alert-info">Cargando productos...</div>';
+                    try {
+                        const res = await fetch(`${API_BASE}/products`);
+                        if (!res.ok) throw new Error('Error al cargar productos');
+                        const products = await res.json();
+                        // Mantener referencia global para editar/consultar
+                        window.adminProducts = products;
+                        if (!products || products.length === 0) {
+                            container.innerHTML = '<div class="alert alert-warning">No hay productos.</div>';
+                            return;
+                        }
+
+                        // Renderizar tabla con acciones
+                        const rows = products.map(p => `
+                            <tr>
+                                <td><strong>${(p.id||'').toString().substring(0,8)}...</strong></td>
+                                <td>${p.nombre || ''}</td>
+                                <td>${p.tipo || ''}</td>
+                                <td>${p.precioBase ? ('$' + p.precioBase.toLocaleString('es-CL')) : '-'}</td>
+                                <td>
+                                    <button class="action-btn btn btn-sm btn-outline-primary" onclick="openEditProduct('${p.id}')">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="action-btn btn btn-sm btn-outline-danger" onclick="deleteProduct('${p.id}')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('');
+
+                        container.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5>Productos (${products.length})</h5>
+                                <button class="btn btn-success" onclick="openCreateProduct()"><i class="fas fa-plus"></i> Crear Producto</button>
+                            </div>
+                            <div class="table-container">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Tipo</th>
+                                            <th>Precio</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${rows}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `;
+                    } catch (error) {
+                        console.error('Error cargando productos admin:', error);
+                        container.innerHTML = `<div class="alert alert-danger">Error cargando productos. Revisa la consola.</div>`;
+                    }
+                }
+
+                // MODAL Y OPERACIONES CRUD DE PRODUCTOS
+                function ensureProductModal() {
+                    if (document.getElementById('productModal')) return;
+                    const modalHtml = `
+                        <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="productModalTitle">Crear / Editar Producto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <form id="productForm">
+                                  <input type="hidden" id="productId">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Nombre</label>
+                                                        <input class="form-control" id="productNombre" required>
+                                                        <div class="form-text text-danger" id="productNombreError" style="display:none;"></div>
+                                                    </div>
+                                  <div class="mb-3">
+                                    <label class="form-label">Tipo</label>
+                                    <select id="productTipo" class="form-select">
+                                      <option value="BAGUETTE">BAGUETTE</option>
+                                      <option value="PANINI">PANINI</option>
+                                      <option value="EXTRA">EXTRA</option>
+                                      <option value="BEBIDA">BEBIDA</option>
+                                    </select>
+                                  </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Precio Base</label>
+                                                        <input type="number" id="productPrecio" class="form-control" required>
+                                                        <div class="form-text text-danger" id="productPrecioError" style="display:none;"></div>
+                                                    </div>
+                                  <div class="mb-3">
+                                    <label class="form-label">Descripción</label>
+                                    <textarea id="productDescripcion" class="form-control" rows="3"></textarea>
+                                  </div>
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Imagen (URL o cargar archivo)</label>
+                                                                        <input type="text" id="productImagen" class="form-control mb-2" placeholder="URL de la imagen (opcional)">
+                                                                        <input type="file" id="productImagenFile" class="form-control" accept="image/*">
+                                                                        <div class="mt-2" id="productImagenPreviewContainer" style="display:none;">
+                                                                                <label class="form-label">Vista previa:</label>
+                                                                                <div><img id="productImagenPreview" src="" alt="Vista previa" style="max-width:200px; max-height:150px; border-radius:6px;"/></div>
+                                                                        </div>
+                                                                    </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" id="productSaveBtn">Guardar</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    `;
+                    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+                    document.getElementById('productSaveBtn').addEventListener('click', submitProductForm);
+
+                    // Agregar validación en tiempo real
+                    const nombreEl = document.getElementById('productNombre');
+                    const precioEl = document.getElementById('productPrecio');
+                    const tipoEl = document.getElementById('productTipo');
+                    const saveBtn = document.getElementById('productSaveBtn');
+                    const imagenEl = document.getElementById('productImagen');
+                    const fileEl = document.getElementById('productImagenFile');
+                    const previewContainer = document.getElementById('productImagenPreviewContainer');
+                    const previewImg = document.getElementById('productImagenPreview');
+
+                    const onChange = () => validateProductForm();
+                    nombreEl.addEventListener('input', onChange);
+                    precioEl.addEventListener('input', onChange);
+                    tipoEl.addEventListener('change', onChange);
+
+                    // Imagen: actualizar preview cuando cambie URL
+                    if (imagenEl) {
+                        imagenEl.addEventListener('input', () => {
+                            const url = imagenEl.value.trim();
+                            if (url) {
+                                const backendBase = (window.Bocatto && window.Bocatto.API_BASE) ? window.Bocatto.API_BASE.replace(/\/api\/?$/,'') : '';
+                                if (url.startsWith('http') || url.startsWith('data:')) {
+                                    previewImg.src = url;
+                                } else if (url.startsWith('/')) {
+                                    previewImg.src = backendBase + url;
+                                } else {
+                                    previewImg.src = url;
+                                }
+                                previewContainer.style.display = 'block';
+                            } else {
+                                // si no hay url y no hay archivo, ocultar preview
+                                if (!fileEl || !fileEl.files || fileEl.files.length === 0) {
+                                    previewImg.src = '';
+                                    previewContainer.style.display = 'none';
+                                }
+                            }
+                        });
+                    }
+
+                    // Cuando se carga un archivo, mostrar preview y mantener el File input (no convertimos a dataURL ahora)
+                    if (fileEl) {
+                        fileEl.addEventListener('change', (e) => {
+                            const f = e.target.files && e.target.files[0];
+                            if (!f) return;
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                previewImg.src = reader.result;
+                                previewContainer.style.display = 'block';
+                            };
+                            reader.readAsDataURL(f);
+                        });
+                    }
+
+                    // Validar inicialmente
+                    validateProductForm();
+                }
+
+                function openCreateProduct() {
+                    ensureProductModal();
+                    document.getElementById('productModalTitle').textContent = 'Crear Producto';
+                    document.getElementById('productId').value = '';
+                    document.getElementById('productNombre').value = '';
+                    document.getElementById('productTipo').value = 'BAGUETTE';
+                    document.getElementById('productPrecio').value = '';
+                    document.getElementById('productDescripcion').value = '';
+                    // limpiar imagen y preview
+                    const imgEl = document.getElementById('productImagen');
+                    const fileEl = document.getElementById('productImagenFile');
+                    const previewContainer = document.getElementById('productImagenPreviewContainer');
+                    const previewImg = document.getElementById('productImagenPreview');
+                    if (imgEl) imgEl.value = '';
+                    if (fileEl) fileEl.value = null;
+                    if (previewImg) previewImg.src = '';
+                    if (previewContainer) previewContainer.style.display = 'none';
+                    const modal = new bootstrap.Modal(document.getElementById('productModal'));
+                    modal.show();
+                }
+
+                function openEditProduct(id) {
+                        ensureProductModal();
+                        const prod = window.adminProducts && window.adminProducts.find(p => p.id === id);
+                    if (!prod) return alert('Producto no encontrado');
+                    document.getElementById('productModalTitle').textContent = 'Editar Producto';
+                    document.getElementById('productId').value = prod.id;
+                    document.getElementById('productNombre').value = prod.nombre || '';
+                    document.getElementById('productTipo').value = prod.tipo || 'BAGUETTE';
+                    document.getElementById('productPrecio').value = prod.precioBase || '';
+                    document.getElementById('productDescripcion').value = prod.descripcion || '';
+                    // cargar imagen si existe
+                    const imgEl = document.getElementById('productImagen');
+                    const previewContainer = document.getElementById('productImagenPreviewContainer');
+                    const previewImg = document.getElementById('productImagenPreview');
+                    if (imgEl) imgEl.value = prod.imagen || '';
+                    if (prod.imagen && previewImg) {
+                        const backendBase = (window.Bocatto && window.Bocatto.API_BASE) ? window.Bocatto.API_BASE.replace(/\/api\/?$/,'') : '';
+                        if (prod.imagen.startsWith('http') || prod.imagen.startsWith('data:')) {
+                            previewImg.src = prod.imagen;
+                        } else if (prod.imagen.startsWith('/')) {
+                            previewImg.src = backendBase + prod.imagen;
+                        } else {
+                            previewImg.src = prod.imagen;
+                        }
+                        if (previewContainer) previewContainer.style.display = 'block';
+                    } else if (previewContainer) {
+                        previewContainer.style.display = 'none';
+                    }
+                    const modal = new bootstrap.Modal(document.getElementById('productModal'));
+                    modal.show();
+                }
+
+                async function submitProductForm() {
+                    const id = document.getElementById('productId').value;
+                    const nombre = document.getElementById('productNombre').value.trim();
+                    const tipo = document.getElementById('productTipo').value;
+                    const precio = Number(document.getElementById('productPrecio').value);
+                    const descripcion = document.getElementById('productDescripcion').value.trim();
+                    const imagenInputEl = document.getElementById('productImagen');
+                    const fileInputEl = document.getElementById('productImagenFile');
+                    let imagen = imagenInputEl ? imagenInputEl.value.trim() : '';
+
+                    // Si hay un archivo seleccionado, subirlo al servidor primero y usar la URL devuelta
+                    if (fileInputEl && fileInputEl.files && fileInputEl.files.length > 0) {
+                        try {
+                            const fd = new FormData();
+                            fd.append('file', fileInputEl.files[0]);
+                            const uploadRes = await fetch(`${API_BASE}/upload`, {
+                                method: 'POST',
+                                body: fd
+                            });
+                            if (!uploadRes.ok) {
+                                const upErr = await uploadRes.json().catch(() => ({}));
+                                console.error('Error al subir archivo:', upErr);
+                                return alert('Error subiendo imagen: ' + (upErr.error || uploadRes.statusText));
+                            }
+                            const upData = await uploadRes.json();
+                            imagen = upData.url || imagen;
+                        } catch (err) {
+                            console.error('Error subiendo imagen:', err);
+                            return alert('Error subiendo imagen. Revisa la consola.');
+                        }
+                    }
+
+                    // Limpiar errores inline previos
+                    const nombreErrEl = document.getElementById('productNombreError');
+                    const precioErrEl = document.getElementById('productPrecioError');
+                    if (nombreErrEl) {
+                        nombreErrEl.textContent = '';
+                        nombreErrEl.style.display = 'none';
+                    }
+                    if (precioErrEl) {
+                        precioErrEl.textContent = '';
+                        precioErrEl.style.display = 'none';
+                    }
+
+                    // Validación cliente
+                    if (typeof validateProductForm === 'function') {
+                        if (!validateProductForm()) return;
+                    } else {
+                        if (!nombre || !tipo || !precio) return alert('Completa nombre, tipo y precio');
+                    }
+
+                    try {
+                        if (!id) {
+                            // Crear
+                            const bodyPayload = { nombre, tipo, precioBase: precio, descripcion, imagen: imagen || null };
+                            console.debug('[Admin] Enviando payload POST productos:', bodyPayload);
+                            const res = await fetch(`${API_BASE}/products`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(bodyPayload)
+                            });
+                            if (!res.ok) {
+                                const err = await res.json().catch(() => ({}));
+                                console.error('Error creando producto:', err);
+                                // Mostrar detalles inline si vienen del servidor
+                                if (err && err.details) {
+                                    const d = err.details;
+                                    if (typeof d === 'string') {
+                                        if (d.toLowerCase().includes('nombre') && nombreErrEl) { nombreErrEl.textContent = d; nombreErrEl.style.display = 'block'; }
+                                        if (d.toLowerCase().includes('precio') && precioErrEl) { precioErrEl.textContent = d; precioErrEl.style.display = 'block'; }
+                                    } else {
+                                        // estructura alternativa
+                                        if (d.nombre && nombreErrEl) { nombreErrEl.textContent = d.nombre; nombreErrEl.style.display = 'block'; }
+                                        if (d.precio && precioErrEl) { precioErrEl.textContent = d.precio; precioErrEl.style.display = 'block'; }
+                                    }
+                                }
+                                return alert('Error guardando producto: ' + (err.error || err.message || JSON.stringify(err)));
+                            }
+                            alert('Producto creado');
+                        } else {
+                            // Actualizar
+                            const bodyPayload = { nombre, tipo, precioBase: precio, descripcion, imagen: imagen || null };
+                            console.debug('[Admin] Enviando payload PUT productos:', bodyPayload);
+                            const res = await fetch(`${API_BASE}/products/${id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(bodyPayload)
+                            });
+                            if (!res.ok) {
+                                const err = await res.json().catch(() => ({}));
+                                console.error('Error actualizando producto:', err);
+                                if (err && err.details) {
+                                    const d = err.details;
+                                    if (typeof d === 'string') {
+                                        if (d.toLowerCase().includes('nombre') && nombreErrEl) { nombreErrEl.textContent = d; nombreErrEl.style.display = 'block'; }
+                                        if (d.toLowerCase().includes('precio') && precioErrEl) { precioErrEl.textContent = d; precioErrEl.style.display = 'block'; }
+                                    } else {
+                                        if (d.nombre && nombreErrEl) { nombreErrEl.textContent = d.nombre; nombreErrEl.style.display = 'block'; }
+                                        if (d.precio && precioErrEl) { precioErrEl.textContent = d.precio; precioErrEl.style.display = 'block'; }
+                                    }
+                                }
+                                return alert('Error actualizando producto: ' + (err.error || err.message || JSON.stringify(err)));
+                            }
+                            alert('Producto actualizado');
+                        }
+
+                        // Cerrar modal y recargar productos
+                        const modalEl = bootstrap.Modal.getInstance(document.getElementById('productModal'));
+                        if (modalEl) modalEl.hide();
+                        await loadAdminProducts();
+                    } catch (error) {
+                        console.error('Error guardando producto:', error);
+                        alert('Error guardando producto. Revisa la consola.');
+                    }
+                }
+
+                function validateProductForm() {
+                    const nombre = document.getElementById('productNombre').value.trim();
+                    const precio = document.getElementById('productPrecio').value.trim();
+                    const tipo = document.getElementById('productTipo').value;
+                    const nombreErrorEl = document.getElementById('productNombreError');
+                    const precioErrorEl = document.getElementById('productPrecioError');
+                    const saveBtn = document.getElementById('productSaveBtn');
+
+                    let valid = true;
+                    if (nombreErrorEl) { nombreErrorEl.textContent = ''; nombreErrorEl.style.display = 'none'; }
+                    if (precioErrorEl) { precioErrorEl.textContent = ''; precioErrorEl.style.display = 'none'; }
+
+                    if (!nombre) {
+                        if (nombreErrorEl) { nombreErrorEl.textContent = 'El nombre es requerido.'; nombreErrorEl.style.display = 'block'; }
+                        valid = false;
+                    }
+                    const precioNum = Number(precio);
+                    if (!precio || Number.isNaN(precioNum) || precioNum <= 0) {
+                        if (precioErrorEl) { precioErrorEl.textContent = 'El precio debe ser un número mayor que 0.'; precioErrorEl.style.display = 'block'; }
+                        valid = false;
+                    }
+                    const allowed = ['BAGUETTE','PANINI','EXTRA','BEBIDA'];
+                    if (!allowed.includes(tipo)) {
+                        valid = false;
+                    }
+
+                    if (saveBtn) saveBtn.disabled = !valid;
+                    return valid;
+                }
+
+                async function deleteProduct(id) {
+                    if (!confirm('¿Eliminar este producto?')) return;
+                    try {
+                        const res = await fetch(`${API_BASE}/products/${id}`, { method: 'DELETE' });
+                        if (!res.ok) {
+                            const err = await res.json().catch(() => ({}));
+                            console.error('Error eliminando producto:', err);
+                            return alert('Error eliminando producto: ' + (err.error || err.message || JSON.stringify(err)));
+                        }
+                        alert('Producto eliminado');
+                        await loadAdminProducts();
+                    } catch (error) {
+                        console.error('Error eliminando producto:', error);
+                        alert('Error al eliminar producto');
+                    }
+                }
+
+                // Ver orden: mostrar modal con detalles
+                function viewOrder(orderId) {
+                                const order = allOrders.find(o => o.id === orderId);
+                                if (!order) return alert('Orden no encontrada');
+                                ensureOrderModal();
+                                renderOrderInModal(order);
+                                const modalEl = new bootstrap.Modal(document.getElementById('orderModal'));
+                                modalEl.show();
+                }
+
+                        // Buscar orden por ID (usa API si no está en memoria)
+                        async function searchOrder() {
+                            const input = document.getElementById('orderSearchInput');
+                            if (!input) return;
+                            const id = input.value.trim();
+                            if (!id) return alert('Ingresa un ID de orden');
+
+                            // Buscar en memoria primero
+                            let order = allOrders.find(o => o.id && o.id.startsWith(id));
+                            try {
+                                if (!order) {
+                                    const res = await fetch(`${API_BASE}/orders/${encodeURIComponent(id)}`);
+                                    if (!res.ok) {
+                                        const err = await res.json().catch(() => ({}));
+                                        return alert('Orden no encontrada en servidor: ' + (err.error || res.statusText));
+                                    }
+                                    order = await res.json();
+                                }
+
+                                ensureOrderModal();
+                                renderOrderInModal(order);
+                                const modalEl = new bootstrap.Modal(document.getElementById('orderModal'));
+                                modalEl.show();
+                            } catch (e) {
+                                console.error('Error buscando orden:', e);
+                                alert('Error buscando orden. Revisa la consola.');
+                            }
+                        }
+
+                        function renderOrderInModal(order) {
+                            const body = document.getElementById('orderModalBody');
+                            const itemsHtml = (order.items || []).map(i => `
+                                        <li>${i.nombre} x${i.cantidad} - ${ (i.precioUnitario || i.precioBase) ? ('$' + ( (i.precioUnitario||i.precioBase) * i.cantidad).toLocaleString('es-CL')) : '' }</li>
+                                `).join('');
+                            body.innerHTML = `
+                                        <p><strong>ID:</strong> ${order.id}</p>
+                                        <p><strong>Estado:</strong> ${getStatusText(order.estado)}</p>
+                                        <p><strong>Fecha:</strong> ${order.fechaCreacion ? new Date(order.fechaCreacion).toLocaleString('es-CL') : ''}</p>
+                                        <hr>
+                                        <h6>Items</h6>
+                                        <ul>${itemsHtml}</ul>
+                                        <hr>
+                                        <p><strong>Total:</strong> $${order.precioTotal ? order.precioTotal.toLocaleString('es-CL') : '0'}</p>
+                                `;
+                        }
+
+                // Pagar orden: POST /api/orders/{id}/pay
+                async function payOrder(orderId) {
+                        if (!confirm('¿Marcar esta orden como pagada?')) return;
+                        try {
+                                const res = await fetch(`${API_BASE}/orders/${orderId}/pay`, { method: 'POST' });
+                                if (!res.ok) {
+                                        const err = await res.json().catch(() => ({}));
+                                        return alert('Error: ' + (err.error || 'No se pudo procesar el pago'));
+                                }
+                                const data = await res.json();
+                                alert('Orden marcada como pagada');
+                                // Recargar órdenes para actualizar estado
+                                await loadOrders();
+                        } catch (error) {
+                                console.error('Error pagando orden:', error);
+                                alert('Error al marcar como pagada. Revisa la consola.');
+                        }
+                }
+                
+                            // Cancelar orden: POST /api/orders/{id}/cancel
+                            async function cancelOrder(orderId) {
+                                if (!confirm('¿Cancelar esta orden?')) return;
+                                try {
+                                    const res = await fetch(`${API_BASE}/orders/${orderId}/cancel`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ motivo: 'Cancelado desde admin' })
+                                    });
+                                    if (!res.ok) {
+                                        const err = await res.json().catch(() => ({}));
+                                        return alert('Error: ' + (err.error || err.message || res.statusText));
+                                    }
+                                    await res.json();
+                                    alert('Orden cancelada');
+                                    // Recargar órdenes para actualizar estado
+                                    await loadOrders();
+                                } catch (error) {
+                                    console.error('Error cancelando orden:', error);
+                                    alert('Error al cancelar la orden. Revisa la consola.');
+                                }
+                            }
+    </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
